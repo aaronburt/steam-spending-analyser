@@ -116,11 +116,6 @@ function render(res, isSample) {
     </div>` : ''}
   </div></div>
   <div class="wrap">
-    <div class="search" role="search">
-      <input id="q" type="search" placeholder="Search your purchases" autocomplete="off" spellcheck="false" aria-label="Search your purchases" role="combobox" aria-expanded="false" aria-controls="sres" aria-autocomplete="list">
-      <button id="qgo" type="button" aria-label="Search"><svg viewBox="0 0 20 20" width="18" height="18" aria-hidden="true"><circle cx="8" cy="8" r="5.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12.2 12.2 17 17" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
-      <ul class="sres" id="sres" role="listbox" hidden></ul>
-    </div>
     <dl class="stats">
       <div><dt>Purchases</dt><dd>${D.length}</dd></div>
       <div><dt>Average</dt><dd>${money(gross / D.length)}</dd></div>
@@ -192,6 +187,12 @@ function render(res, isSample) {
       <p>Unofficial tool. Not affiliated with Valve or Steam.</p>
     </footer>
   </div>`;
+
+  document.getElementById('searchslot').innerHTML = `<div class="search" role="search">
+      <input id="q" type="search" placeholder="Search your purchases" autocomplete="off" spellcheck="false" aria-label="Search your purchases" role="combobox" aria-expanded="false" aria-controls="sres" aria-autocomplete="list">
+      <button id="qgo" type="button" aria-label="Search"><svg viewBox="0 0 20 20" width="18" height="18" aria-hidden="true"><circle cx="8" cy="8" r="5.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12.2 12.2 17 17" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+      <ul class="sres" id="sres" role="listbox" hidden></ul>
+    </div>`;
 
   const chart = document.getElementById('chart'), ro = document.getElementById('readout');
   const show = i => {

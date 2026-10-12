@@ -182,7 +182,8 @@ footer p{margin:0 0 8px}
   .disc.big .now{font-size:20px}
 }
 
-.search{position:relative;margin-top:20px;display:flex}
+.search-slot{flex:1 1 280px;max-width:420px;margin-left:auto}
+.search{position:relative;display:flex}
 .search input{flex:1;min-width:0;appearance:none;border:0;border-radius:2px 0 0 2px;background:#316282;color:var(--bright);font:15px var(--ui);padding:11px 14px}
 .search input::placeholder{color:#a3c4dc}
 .search input::-webkit-search-cancel-button{filter:invert(1)}
