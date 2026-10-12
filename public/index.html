@@ -2,7 +2,7 @@
 <title>Steam Spending Analyser</title>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&display=swap">
-<link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="style.css?v=dev">
 
 <div class="topbar"><div class="topbar-in">
   <span class="user" id="user">Steam account</span>
@@ -30,6 +30,7 @@
           <button class="btn go" id="go" type="button">Analyse</button>
           <label class="filebtn">Open .txt file<input type="file" id="file" accept=".txt,text/plain"></label>
           <button class="btn plain" id="reset" type="button">Show example</button>
+          <button class="btn plain" id="clear" type="button" hidden>Clear saved import</button>
         </div>
         <p class="status" id="status" role="status"></p>
       </div>
@@ -40,8 +41,8 @@
 
 <div id="report"></div>
 
-<script src="parser.js"></script>
-<script src="sample.js"></script>
-<script src="app.js"></script>
+<script src="parser.js?v=dev"></script>
+<script src="sample.js?v=dev"></script>
+<script src="app.js?v=dev"></script>
 
 </body></html>

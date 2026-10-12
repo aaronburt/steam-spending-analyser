@@ -318,6 +318,7 @@ function analyse(text, fromStore) {
   document.getElementById('hint').textContent = `Showing your history: ${res.spend.length} purchases from ${res.blocks} transactions. Open to import another.`;
   setStatus(`Read ${res.blocks} transactions: ${res.spend.length} purchases, ${res.refunds.length} refunds, ${res.topupN} wallet top-ups, ${res.market} market trades.`, true);
   if (!fromStore) { try { localStorage.setItem(KEY, text); } catch (e) {} }
+  syncClear();
   imp.open = false;
   return true;
 }
@@ -335,15 +336,27 @@ document.getElementById('file').addEventListener('change', e => {
   fr.readAsText(f);
   e.target.value = '';
 });
-document.getElementById('reset').addEventListener('click', () => {
-  try { localStorage.removeItem(KEY); } catch (e) {}
+const clearEl = document.getElementById('clear');
+const syncClear = () => {
+  let has = false;
+  try { has = !!localStorage.getItem(KEY); } catch (e) {}
+  clearEl.hidden = !has;
+};
+const showExample = msg => {
   rawEl.value = '';
   render(parseSteamHistory(SAMPLE), true);
-  setStatus('Showing the example account. Your saved history was cleared from this browser.', true);
+  setStatus(msg, true);
   document.getElementById('hint').textContent = 'Runs in your browser. Nothing is uploaded.';
   imp.open = true;
+};
+document.getElementById('reset').addEventListener('click', () => showExample('Showing the example account. Your saved history is still stored in this browser.'));
+clearEl.addEventListener('click', () => {
+  try { localStorage.removeItem(KEY); } catch (e) {}
+  syncClear();
+  showExample('Your saved history was cleared from this browser. Showing the example account.');
 });
 
 let saved = null;
 try { saved = localStorage.getItem(KEY); } catch (e) {}
 if (!(saved && analyse(saved, true))) render(parseSteamHistory(SAMPLE), true);
+syncClear();
