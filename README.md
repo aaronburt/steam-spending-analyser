@@ -4,3 +4,8 @@ Client-side tool that turns a copied Steam Purchase History page into spending c
 
 Open `public/index.html` in a browser and follow the import steps.
 
+
+## Disclaimer
+
+This project was written with AI and reviewed by a human.
+
