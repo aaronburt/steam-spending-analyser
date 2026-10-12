@@ -116,6 +116,11 @@ function render(res, isSample) {
     </div>` : ''}
   </div></div>
   <div class="wrap">
+    <div class="search" role="search">
+      <input id="q" type="search" placeholder="Search your purchases" autocomplete="off" spellcheck="false" aria-label="Search your purchases" role="combobox" aria-expanded="false" aria-controls="sres" aria-autocomplete="list">
+      <button id="qgo" type="button" aria-label="Search"><svg viewBox="0 0 20 20" width="18" height="18" aria-hidden="true"><circle cx="8" cy="8" r="5.5" fill="none" stroke="currentColor" stroke-width="2"/><path d="M12.2 12.2 17 17" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+      <ul class="sres" id="sres" role="listbox" hidden></ul>
+    </div>
     <dl class="stats">
       <div><dt>Purchases</dt><dd>${D.length}</dd></div>
       <div><dt>Average</dt><dd>${money(gross / D.length)}</dd></div>
@@ -243,6 +248,58 @@ function render(res, isSample) {
   $('zpeak').addEventListener('click', () => zoomTo(peakY, peakY));
   chart.addEventListener('click', e => { const b = e.target.closest('button.y'); if (b) zoomTo(+b.dataset.y, +b.dataset.y); });
   drawChart();
+
+  const q = $('q'), sres = $('sres'), MAXHITS = 8;
+  const norm = s => s.toLowerCase().replace(/[™®©:'’"!?.,\-–—]/g, ' ').replace(/\s+/g, ' ').trim();
+  const keys = D.map(r => norm(r.n));
+  let hits = [], act = -1;
+  const closeRes = () => { sres.hidden = true; q.setAttribute('aria-expanded', 'false'); act = -1; };
+  const setAct = n => {
+    act = n;
+    sres.querySelectorAll('[role=option]').forEach((li, i) => {
+      li.classList.toggle('on', i === act); li.setAttribute('aria-selected', i === act);
+    });
+    q.setAttribute('aria-activedescendant', act >= 0 ? 'so' + act : '');
+    sres.querySelector('.on')?.scrollIntoView({block: 'nearest'});
+  };
+  const runSearch = () => {
+    const terms = norm(q.value).split(' ').filter(Boolean);
+    if (!terms.length) { hits = []; closeRes(); return; }
+    const all = D.filter((r, i) => terms.every(t => keys[i].includes(t)))
+      .sort((a, b) => (keys[a.i].startsWith(terms[0]) ? 0 : 1) - (keys[b.i].startsWith(terms[0]) ? 0 : 1) || (a.d < b.d ? 1 : -1));
+    hits = all.slice(0, MAXHITS);
+    sres.innerHTML = all.length
+      ? hits.map((r, n) => `<li role="option" id="so${n}" data-n="${n}"><span class="sn">${esc(r.n)}<small>${dt(r.d)} · ${KIND[r.k]}${r.r ? ' · Refunded' : ''}</small></span>${disc(r)}</li>`).join('')
+        + (all.length > MAXHITS ? `<li class="sm">${all.length - MAXHITS} more match${all.length - MAXHITS > 1 ? 'es' : ''}. Keep typing to narrow it down.</li>` : '')
+      : `<li class="sm">No purchases match “${esc(q.value.trim())}”.</li>`;
+    sres.hidden = false; q.setAttribute('aria-expanded', 'true'); act = -1;
+  };
+  const choose = n => {
+    const r = hits[n]; if (!r) return;
+    q.value = r.n; closeRes();
+    const y = +r.d.slice(0, 4);
+    zoomTo(y, y); show(r.i);
+    $('chartwrap').closest('.panel').scrollIntoView({behavior: 'smooth', block: 'center'});
+  };
+  q.addEventListener('input', runSearch);
+  q.addEventListener('focus', () => { if (q.value.trim()) runSearch(); });
+  q.addEventListener('blur', closeRes);
+  q.addEventListener('keydown', e => {
+    if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+      if (sres.hidden) runSearch();
+      if (!hits.length) return;
+      e.preventDefault();
+      setAct(e.key === 'ArrowDown' ? (act + 1) % hits.length : (act - 1 + hits.length) % hits.length);
+    } else if (e.key === 'Enter') {
+      if (sres.hidden) runSearch();
+      if (hits.length) { e.preventDefault(); choose(act >= 0 ? act : 0); }
+    } else if (e.key === 'Escape') closeRes();
+  });
+  sres.addEventListener('mousedown', e => {
+    e.preventDefault();
+    const li = e.target.closest('[role=option]'); if (li) choose(+li.dataset.n);
+  });
+  $('qgo').addEventListener('click', () => { runSearch(); if (hits.length) choose(0); q.focus(); });
 }
 
 const status = document.getElementById('status'), rawEl = document.getElementById('raw'), imp = document.getElementById('import');

@@ -181,3 +181,19 @@ footer p{margin:0 0 8px}
   .disc.big .pct{font-size:24px}
   .disc.big .now{font-size:20px}
 }
+
+.search{position:relative;margin-top:20px;display:flex}
+.search input{flex:1;min-width:0;appearance:none;border:0;border-radius:2px 0 0 2px;background:#316282;color:var(--bright);font:15px var(--ui);padding:11px 14px}
+.search input::placeholder{color:#a3c4dc}
+.search input::-webkit-search-cancel-button{filter:invert(1)}
+.search input:focus-visible{outline:2px solid var(--blue);outline-offset:-2px}
+.search button{appearance:none;border:0;border-radius:0 2px 2px 0;background:#417a9b;color:var(--bright);padding:0 16px;cursor:pointer;display:flex;align-items:center}
+.search button:hover{background:#4e8fb4}
+.search button:focus-visible{outline:2px solid var(--blue);outline-offset:2px}
+.sres{position:absolute;top:100%;left:0;right:0;z-index:5;margin:0;padding:0;list-style:none;background:#c6d4df;color:#1b2838;box-shadow:0 8px 24px rgba(0,0,0,.5);max-height:60vh;overflow-y:auto}
+.sres li{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:8px 12px;cursor:pointer}
+.sres li[role=option]:hover,.sres li.on{background:#a9bfd0}
+.sres .sn{min-width:0;font-weight:600;overflow-wrap:anywhere}
+.sres .sn small{display:block;font-weight:400;font-size:12px;color:#4b5f72}
+.sres .sm{cursor:default;font-size:13px;color:#4b5f72}
+.sres .disc .px{background:#1b2838}
