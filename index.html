@@ -3,7 +3,6 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&display=swap">
 <style>
-/* Layout: store-style dark navy page; full-width top bar and hero banner, then panels on a single 940px column. Deliberately single-theme (dark). */
 :root{
   --bg:#1b2838; --bar:#171a21; --panel:#16202d; --panel-hi:#1f2f40; --rule:#2a3f5a;
   --ink:#c7d5e0; --bright:#ffffff; --muted:#8f98a0; --blue:#66c0f4;
@@ -25,7 +24,6 @@ a{color:var(--blue)}
 
 .wrap{max-width:940px;margin:0 auto;padding-inline:16px}
 
-/* import */
 .import{margin-top:20px;background:var(--panel)}
 .import summary{cursor:pointer;list-style:none;padding:14px 18px;display:flex;flex-wrap:wrap;align-items:center;gap:8px 14px}
 .import summary::-webkit-details-marker{display:none}
@@ -53,7 +51,6 @@ textarea:focus-visible,button:focus-visible,.filebtn:focus-within{outline:2px so
 .status.ok{color:var(--deal)} .status.err{color:var(--bad)}
 .banner{margin-top:12px;background:#3a3420;color:#f1d58a;font-size:13px;padding:8px 12px}
 
-/* hero */
 .hero{padding:30px 16px 30px;margin-top:20px;background:linear-gradient(180deg,#2a475e 0%,rgba(42,71,94,0) 100%)}
 .hero-in{max-width:940px;margin:0 auto;display:grid;gap:24px}
 @media(min-width:760px){.hero-in{grid-template-columns:minmax(0,1.4fr) minmax(0,1fr);align-items:end}}
@@ -227,7 +224,6 @@ footer p{margin:0 0 8px}
 <div id="report"></div>
 
 <script>
-/* Parses text copied from a Steam "Purchase History" page (English). */
 function parseSteamHistory(raw) {
   const MON = {jan:0,feb:1,mar:2,apr:3,may:4,jun:5,jul:6,aug:7,sep:8,oct:9,nov:10,dec:11};
   const DATE_DMY = /^(\d{1,2}) ([A-Za-z]{3}),? (\d{4})\s*(.*)$/;
@@ -281,10 +277,7 @@ function parseSteamHistory(raw) {
     const {lines: ls, head} = b;
     const allText = head + '\n' + ls.join('\n');
     const firstAmountLine = () => {
-      /* The Total row is the one that holds tab-separated columns. Funding lines ("£0.02 Wallet", "£41.36 MasterCard")
-         and list/sale price pairs ("£45.98 £41.38") never contain tabs, so they are skipped. */
       for (const l of ls) if (l.includes('\t')) { const a = amounts(l); if (a.length) return a[0]; }
-      /* Fallback for pastes without tabs: sale price from the pair line, else a lone amount line. */
       for (const l of ls) { const t = l.trim(), a = amounts(t); if (a.length === 2 && t.replace(MONEY,'').trim() === '') return a[1]; }
       for (const l of ls) { const t = l.trim(), a = amounts(t); if (a.length === 1 && t.replace(MONEY,'').trim() === '') return a[0]; }
       return 0;
@@ -384,7 +377,6 @@ function render(res, isSample) {
   const first = D[0].d, last = D[D.length-1].d;
   const biggest = D.reduce((a,b) => b.p > a.p ? b : a, D[0]);
 
-  /* notes */
   const notes = [];
   const pm = Array(12).fill(0); by[peakY].forEach(r => pm[+r.d.slice(5,7)-1] += r.p);
   const pmI = pm.indexOf(Math.max(...pm));
@@ -410,7 +402,6 @@ function render(res, isSample) {
   }
 
 
-  /* donuts */
   const ownT = sum(D.filter(r => r.k === 'own')), giftT = sum(gifts), gameT = sum(games);
   const yRank = years.slice().sort((a,b) => yTot(b) - yTot(a));
   const SH = ['#66c0f4','#4a9fd0','#3a7ea8','#2d6080'];
@@ -427,7 +418,6 @@ function render(res, isSample) {
     donut('Share by year', ySl, String(yRank[0]), 'top year')
   ].join('');
 
-  /* months */
   const mv = Array(12).fill(0); D.forEach(r => mv[+r.d.slice(5,7)-1] += r.p);
   const top2 = [...mv.keys()].sort((a,b) => mv[b]-mv[a]).slice(0,2).sort((a,b) => a-b);
   const mmax = Math.max(...mv);
