@@ -1,0 +1,46 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Steam Spending Analyser</title>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700;800&display=swap">
+<link rel="stylesheet" href="style.css">
+
+<div class="topbar"><div class="topbar-in">
+  <span class="user" id="user">Steam account</span>
+  <span class="crumbs">Purchase History › <b>Spending insights</b></span>
+</div></div>
+
+<div class="wrap">
+  <details class="import" id="import" open>
+    <summary><span class="ttl">Import your purchase history</span><span class="hint" id="hint">Runs in your browser. Nothing is uploaded.</span><span class="chev"></span></summary>
+    <div class="import-body">
+      <div>
+        <ol class="steps">
+          <li>Sign in and open <a href="https://store.steampowered.com/account/history/" target="_blank" rel="noopener">store.steampowered.com/account/history</a>.</li>
+          <li>Scroll to the bottom and click <b>Load More Transactions</b> until the list stops growing.</li>
+          <li>Select the whole page with <kbd>Ctrl</kbd>+<kbd>A</kbd> (<kbd>⌘</kbd>+<kbd>A</kbd> on Mac) and copy it.</li>
+          <li>Paste it into the box and click <b>Analyse</b>.</li>
+        </ol>
+        <p class="note">Works with Steam set to English. Desktop Chrome or Edge copies the table most reliably.</p>
+      </div>
+      <div>
+        <label for="raw" class="note" style="display:block;margin:0 0 6px">Purchase history text</label>
+        <textarea id="raw" placeholder="Paste the copied Purchase History page here"></textarea>
+        <div class="actions">
+          <button class="btn go" id="go" type="button">Analyse</button>
+          <label class="filebtn">Open .txt file<input type="file" id="file" accept=".txt,text/plain"></label>
+          <button class="btn plain" id="reset" type="button">Show example</button>
+        </div>
+        <p class="status" id="status" role="status"></p>
+      </div>
+    </div>
+  </details>
+  <div class="banner" id="banner">You are looking at a made-up example account. Import your own history above to see yours.</div>
+</div>
+
+<div id="report"></div>
+
+<script src="parser.js"></script>
+<script src="sample.js"></script>
+<script src="app.js"></script>
+
+</body></html>
